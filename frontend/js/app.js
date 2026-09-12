@@ -117,7 +117,8 @@ async function stopRecording() {
         const data = await response.json();
 
         if (data.success) {
-
+            
+            // console.log(data);
             result.textContent = data.text;
             intent.textContent = data.intent;
             entities.textContent = JSON.stringify(data.entities);

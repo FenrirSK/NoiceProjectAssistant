@@ -17,7 +17,7 @@ def extract_entities(text: str) -> dict:
     
     if location_match:
         entities["location"] = location_match.group(1).strip()
-        
+       
     # Extract common issue
     issue_words = [
         "ceiling",
@@ -45,4 +45,4 @@ def extract_entities(text: str) -> dict:
     if assign_match:
         entities["assignee"] = assign_match.group(1).strip()
         
-    return "entities"
+    return entities
