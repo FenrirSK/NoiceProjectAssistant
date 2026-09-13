@@ -3,6 +3,10 @@ const status = document.getElementById("status");
 const result = document.getElementById("result");
 const intent = document.getElementById("intent");
 const entities = document.getElementById("entities");
+const command = document.getElementById("command");
+const searchResults = document.getElementById("searchResults");
+
+
 
 let audioContext;
 let source;
@@ -118,13 +122,52 @@ async function stopRecording() {
 
         if (data.success) {
             
-            // console.log(data);
+
             result.textContent = data.text;
             intent.textContent = data.intent;
             entities.textContent = JSON.stringify(data.entities);
 
-            status.textContent = "Done!";
+            if (data.confirmation_required) {
+                command.textContent = data.confirmation_message;
+            } else {
+                command.textContent = data.command?.message || "";
+            }
 
+            searchResults.innerHTML = "";
+
+            if (data.command?.snags) {
+
+                if (data.command.snags.length === 0) {
+
+                    searchResults.textContent = "No snags found.";
+
+                } else {
+
+                    const heading = document.createElement("h3");
+                    heading.textContent = `Search Results (${data.command.count})`;
+
+                    searchResults.appendChild(heading);
+
+                    data.command.snags.forEach((snag, index) => {
+
+                        const snagElement = document.createElement("div");
+
+                        snagElement.innerHTML = `
+                            <p>
+                                <strong>Snag ${index + 1}</strong><br>
+                                Location: ${snag.location || "N/A"}<br>
+                                Issue: ${snag.issue || "N/A"}<br>
+                                Assignee: ${snag.assignee || "N/A"}<br>
+                                Status: ${snag.status || "N/A"}
+                            </p>
+                        `;
+
+                        searchResults.appendChild(snagElement);
+                    });
+                }
+            }
+
+            status.textContent = "Done!";
         } else {
 
             status.textContent =
