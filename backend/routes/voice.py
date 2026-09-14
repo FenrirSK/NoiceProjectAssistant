@@ -30,6 +30,7 @@ async def process_voice(file: UploadFile = File(...)):
     text = speech_to_text(audio_bytes)
     
     # check if the user is confirming a previous command
+    print("CONFIRMATION TEST TEXT:", repr(text))
     if is_confirmation(text):
         
         pending_intent, pending_entities = get_pending_command()
