@@ -13,6 +13,9 @@ def execute_command(intent: str, entities: dict):
     
     if intent == "update":
         return update_snag(entities)
+    
+    if intent == "delete":
+        return delete_snag(entities)
 
     return {
         "success": False,
@@ -101,12 +104,6 @@ def update_snag(entities: dict):
             "$options": "i"
         }
 
-    if entities.get("assignee"):
-        query["assignee"] = {
-            "$regex": re.escape(entities["assignee"]),
-            "$options": "i"
-        }
-
     if not query:
         return {
             "success": False,
@@ -136,11 +133,75 @@ def update_snag(entities: dict):
         return {
             "success": False,
             "message": "No matching snag found."
+    }
+
+    if result.modified_count == 0:
+        return {
+            "success": True,
+            "message": "Snag already has the requested values.",
+            "modified_count": 0
         }
 
     return {
         "success": True,
         "message": "Snag updated successfully",
         "modified_count": result.modified_count
-        
+    }
+    
+def delete_snag(entities: dict):
+
+    query = {}
+
+    if entities.get("location"):
+        query["location"] = {
+            "$regex": re.escape(entities["location"]),
+            "$options": "i"
+        }
+
+    if entities.get("issue"):
+        query["issue"] = {
+            "$regex": re.escape(entities["issue"]),
+            "$options": "i"
+        }
+
+    if not query:
+        return {
+            "success": False,
+            "message": "I need more information to find the snag."
+        }
+
+    matching_snags = list(
+        db.snags.find(query)
+    )
+
+    # No matching snag
+    if len(matching_snags) == 0:
+        return {
+            "success": False,
+            "message": "No matching snag found."
+        }
+
+    # Multiple matching snags
+    if len(matching_snags) > 1:
+        return {
+            "success": False,
+            "message": (
+                f"I found {len(matching_snags)} matching snags. "
+                "Please provide more details before deleting."
+            ),
+            "count": len(matching_snags)
+        }
+
+    # Exactly one matching snag
+    result = db.snags.delete_one(query)
+
+    if result.deleted_count == 0:
+        return {
+            "success": False,
+            "message": "The snag could not be deleted."
+        }
+
+    return {
+        "success": True,
+        "message": "Snag deleted successfully."
     }
