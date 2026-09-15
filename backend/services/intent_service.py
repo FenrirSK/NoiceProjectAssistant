@@ -5,31 +5,48 @@ def detect_intent(text: str) -> str:
 
     text = text.lower().strip()
 
-    # Create snag
+    # CREATE SNAG
     if re.search(
-        r"\b(create|add|make|report|raise|log)\b.*\b(snag|snags|issue|issues|problem|problems|defect|defects)\b",
+        r"\b("
+        r"create|add|make|report|raise|log|"
+        r"record|register|file"
+        r")\b"
+        r".*\b("
+        r"snag|snags|issue|issues|problem|problems|"
+        r"defect|defects"
+        r")\b",
         text
     ):
         return "create_snag"
 
-    # Search snags
+    # SEARCH SNAGS
     if re.search(
-        r"\b(search|find|show|look for|list|give me|are there|is there)\b.*"
-        r"\b(snag|snags|issue|issues|problem|problems|defect|defects)\b",
+        r"\b("
+        r"search|find|show|look\s+for|list|"
+        r"give\s+me|are\s+there|is\s+there|"
+        r"check|display"
+        r")\b"
+        r".*\b("
+        r"snag|snags|issue|issues|problem|problems|"
+        r"defect|defects"
+        r")\b",
         text
     ):
         return "search_snags"
 
-    # Delete
+    # DELETE SNAG
     if re.search(
-        r"\b(delete|remove)\b",
+        r"\b(delete|remove|erase)\b",
         text
     ):
         return "delete"
 
-    # Update
+    # UPDATE SNAG
     if re.search(
-        r"\b(update|edit|change|modify)\b",
+        r"\b("
+        r"update|edit|change|modify|"
+        r"assign|reassign|close|reopen"
+        r")\b",
         text
     ):
         return "update"

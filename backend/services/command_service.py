@@ -19,7 +19,7 @@ def execute_command(intent: str, entities: dict):
 
     return {
         "success": False,
-        "message": f"Unknown intent: {intent}"
+        "message": "Sorry, I didn't understand that command. Please try again."
     }
 
 

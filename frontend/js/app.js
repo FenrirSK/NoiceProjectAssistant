@@ -1,5 +1,7 @@
 const recordButton = document.getElementById("recordButton");
 const status = document.getElementById("status");
+const statusIndicator = document.getElementById("statusIndicator");
+const statusDot = document.getElementById("statusDot");
 const result = document.getElementById("result");
 const intent = document.getElementById("intent");
 const entities = document.getElementById("entities");
@@ -65,7 +67,7 @@ async function startRecording() {
         isRecording = true;
 
         recordButton.textContent = "⏹ Stop Recording";
-        status.textContent = "Recording... Speak now!";
+        setStatus("Listening... Speak now!", "listening");
         result.textContent = "";
 
     } catch (error) {
@@ -98,7 +100,7 @@ async function stopRecording() {
 
     recordButton.disabled = true;
     recordButton.textContent = "Processing...";
-    status.textContent = "Sending audio to server...";
+    setStatus("Processing...", "processing");
 
     try {
 
@@ -126,12 +128,21 @@ async function stopRecording() {
             result.textContent = data.text;
             intent.textContent = data.intent;
             entities.textContent = JSON.stringify(data.entities);
+        if (data.confirmation_required) {
 
-            if (data.confirmation_required) {
-                command.textContent = data.confirmation_message;
-            } else {
-                command.textContent = data.command?.message || "";
-            }
+            command.textContent = data.confirmation_message;
+
+            speak(data.confirmation_message);
+
+        } else {
+
+             const message = data.command?.message || "";
+
+             command.textContent = message;
+
+             speak(message);
+
+        }
 
             searchResults.innerHTML = "";
 
@@ -167,7 +178,7 @@ async function stopRecording() {
                 }
             }
 
-            status.textContent = "Done!";
+            setStatus("Done!", "done");
         } else {
 
             status.textContent =
@@ -293,4 +304,28 @@ function writeString(view, offset, string) {
         );
 
     }
+}
+
+function speak(text) {
+
+    if (!text) {
+        return;
+    }
+
+    const speech = new SpeechSynthesisUtterance(text);
+
+    speech.rate = 1;
+    speech.pitch = 1;
+    speech.volume = 1;
+
+    window.speechSynthesis.cancel();
+
+    window.speechSynthesis.speak(speech);
+}
+
+function setStatus(message, state) {
+
+    status.textContent = message;
+
+    statusDot.className = state;
 }

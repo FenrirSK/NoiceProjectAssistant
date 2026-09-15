@@ -30,7 +30,7 @@ def extract_entities(text: str) -> dict:
     # --------------------------------
 
     update_location_match = re.search(
-        r"\b(?:update|change|edit|modify)\s+"
+        r"\b(?:update|change|edit|modify|close|reopen)\s+"
         r"(?:the\s+)?(.+?)\s+snag\b",
         text
     )
@@ -44,7 +44,7 @@ def extract_entities(text: str) -> dict:
     # --------------------------------
 
     delete_location_match = re.search(
-        r"\b(?:delete|remove)\s+"
+        r"\b(?:delete|remove|erase)\s+"
         r"(?:the\s+)?(.+?)\s+snag\b",
         text
     )
@@ -107,3 +107,4 @@ def extract_entities(text: str) -> dict:
         entities["status"] = "in progress"
 
     return entities
+

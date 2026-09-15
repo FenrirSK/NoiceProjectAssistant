@@ -1,41 +1,105 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Noice project Assitant</title>
+
+```
+<title>Veyra</title>
+
+<link rel="stylesheet" href="css/style.css">
+```
+
 </head>
 
 <body>
 
-    <h1>Noice Project Assistant</h1>
+```
+<div class="container">
 
-    <button id="recordButton"> Start Recording</button>
-    <p id="status">Click the button to start</p>
-    
-    <p>
-        <strong>Recognized Text:</strong>
-        <span id="result"></span>
-    </p>
+    <header class="header">
+        <div class="logo">Veyra</div>
+        <p class="subtitle">
+            Voice-powered project assistant
+        </p>
+    </header>
 
-    <p>
-        <strong>Intent:</strong>
-        <span id="intent"></span>
-    </p>
 
-    <p>
-        <strong>Entities:</strong>
-        <span id="entities"></span>
-    </p>
-    
-    <p>
-        <strong>Command:</strong>
-        <span id="command"></span>
-    </p>
+    <section class="voice-section">
 
-    <div id="searchResults"></div>
-    
-    <script src="js/app.js"></script>
-    
+        <button id="recordButton">
+            🎙️ Start Recording
+        </button>
+
+        <div id="statusIndicator">
+            <span id="statusDot"></span>
+            <span id="status">Ready</span>
+        </div>
+
+    </section>
+
+
+    <section class="results">
+
+        <div class="card">
+            <h2>Recognized Command</h2>
+
+            <p id="result">
+                —
+            </p>
+        </div>
+
+
+        <div class="card">
+
+            <h2>Understanding</h2>
+
+            <div class="entity-grid">
+
+                <div class="entity">
+                    <strong>Intent</strong>
+                    <span id="intent">—</span>
+                </div>
+
+                <div class="entity">
+                    <strong>Entities</strong>
+                    <span id="entities">—</span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>Veyra Response</h2>
+
+            <p id="command">
+                —
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>Search Results</h2>
+
+            <div id="searchResults">
+                No search performed yet.
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<script src="js/app.js"></script>
+```
+
 </body>
 </html>
